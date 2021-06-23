@@ -18,22 +18,24 @@ from collections import deque
 from datetime import timedelta
 from math import ceil
 from sys import stderr
-try:
-    from time import monotonic
-except ImportError:
-    from time import time as monotonic
 
+# For MicroPython
+from .adafruit_datetime import timedelta
+from time import ticks_ms
 
 __version__ = '1.5'
 
 HIDE_CURSOR = '\x1b[?25l'
 SHOW_CURSOR = '\x1b[?25h'
 
+def monotonic() -> float:
+    return ticks_ms() / 1000
+
 
 class Infinite(object):
     file = stderr
     sma_window = 10         # Simple Moving Average window
-    check_tty = True
+    check_tty = False
     hide_cursor = True
 
     def __init__(self, message='', **kwargs):
@@ -109,11 +111,14 @@ class Infinite(object):
                 self._hidden_cursor = False
 
     def is_tty(self):
-        try:
-            return self.file.isatty() if self.check_tty else True
-        except AttributeError:
-            msg = "%s has no attribute 'isatty'. Try setting check_tty=False." % self
-            raise AttributeError(msg)
+        return True
+        # TODO(mst) MicroPython doesn't currently support is_tty()
+        #
+        # try:
+        #     return self.file.isatty() if self.check_tty else True
+        # except AttributeError:
+        #     msg = "%s has no attribute 'isatty'. Try setting check_tty=False." % self
+        #     raise AttributeError(msg)
 
     def next(self, n=1):
         now = monotonic()

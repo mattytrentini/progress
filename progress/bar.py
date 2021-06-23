@@ -36,9 +36,12 @@ class Bar(Progress):
         empty_length = self.width - filled_length
 
         message = self.message % self
+        message = 'Fixme'
         bar = color(self.fill * filled_length, fg=self.color)
         empty = self.empty_fill * empty_length
+        # TODO(mst) Revisit to fix MicroPython string formatting
         suffix = self.suffix % self
+        suffix = 'suffix'
         line = ''.join([message, self.bar_prefix, bar, empty, self.bar_suffix,
                         suffix])
         self.writeln(line)
@@ -75,7 +78,10 @@ class IncrementalBar(Bar):
         phase = int((filled_len - nfull) * nphases)  # Phase of last char
         nempty = self.width - nfull                  # Number of empty chars
 
-        message = self.message % self
+        # TODO(mst) MicroPython's string formatting doesn't seem to work the way
+        # the original did
+        # message = self.message % self
+        message = self.message.format(self)
         bar = color(self.phases[-1] * nfull, fg=self.color)
         current = self.phases[phase] if phase > 0 else ''
         empty = self.empty_fill * max(0, nempty - len(current))
