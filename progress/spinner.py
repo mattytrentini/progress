@@ -24,7 +24,8 @@ class Spinner(Infinite):
 
     def update(self):
         i = self.index % len(self.phases)
-        message = self.message % self
+        attr = {e: self[e] for e in dir(self)}
+        message = self.message % attr if '%(' in self.message else self.message
         line = ''.join([message, self.phases[i]])
         self.writeln(line)
 

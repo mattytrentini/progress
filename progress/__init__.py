@@ -14,14 +14,15 @@
 
 from __future__ import division, print_function
 
-from collections import deque
-from datetime import timedelta
+#from collections import deque
+#from datetime import timedelta
 from math import ceil
 from sys import stderr
 
 # For MicroPython
 from .adafruit_datetime import timedelta
 from time import ticks_ms
+from deque2 import deque
 
 __version__ = '1.5'
 
